@@ -14,12 +14,15 @@ class UserService implements IUserService {
     registerUser(user: UserModel): Promise<UserModel> {
         return new Promise((resolve, reject) => {
             connection.query<ResultSetHeader>(
-                `INSERT INTO (username, email, pass) VALUES(?,?,?);`,
+                `INSERT INTO ruin_users (username, email, pass) VALUES(?,?,?);`,
                 [user.username, user.email, user.pass],
                 (e, res) => {
                     if (e) {
                         logger.error(`Could not insert user into database: ${e.message}`)
                         reject(e)
+                    } else {
+                        const insertedUser = { ...user, id: res.insertId };
+                        resolve(insertedUser);
                     }
                 }
             )
