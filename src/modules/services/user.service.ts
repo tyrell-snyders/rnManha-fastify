@@ -1,5 +1,6 @@
 import { logger } from "../../utils/logger"
 import { connection } from "../../utils/mysql"
+import UserDTOModel from "../model/DTO/userDTO.model"
 import UserModel from "../model/user.model"
 import { OkPacketParams, OkPacket, ResultSetHeader } from "mysql2" 
 
@@ -7,7 +8,7 @@ import { OkPacketParams, OkPacket, ResultSetHeader } from "mysql2"
 interface IUserService {
     registerUser(user: UserModel): Promise<UserModel>
     getAllUsers(): Promise<UserModel[]>
-    // loginUser(user: UserModel): Promise<string>
+    loginUser(user: UserDTOModel): Promise<UserDTOModel>
 }
 
 class UserService implements IUserService {
@@ -20,7 +21,7 @@ class UserService implements IUserService {
                     if (e) {
                         logger.error(`Could not insert user into database: ${e.message}`)
                         reject(e)
-                    } else {
+                    } else {    
                         const insertedUser = { ...user, id: res.insertId };
                         resolve(insertedUser);
                     }
@@ -42,9 +43,9 @@ class UserService implements IUserService {
             })
         })
     }
-    // loginUser(user: UserModel): Promise<string> {
-    //     throw new Error("Method not implemented.")
-    // }
+    loginUser(user: UserDTOModel): Promise<UserDTOModel> {
+        throw new Error("Method not implemented.")
+    }
     
 }
 
