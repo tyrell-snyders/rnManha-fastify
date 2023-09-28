@@ -8,8 +8,10 @@ export function userRoute(
     done: () => void
 ) {
     const controller = new userController()
+
     app.get('/users', {}, controller.getUsersHandler)
     app.post('/register', {}, controller.registerUserHandler)
+    app.post('/login', {}, controller.loginUserHandler)
 
     done()
 }

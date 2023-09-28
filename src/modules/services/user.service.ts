@@ -2,13 +2,13 @@ import { logger } from "../../utils/logger"
 import { connection } from "../../utils/mysql"
 import UserDTOModel from "../model/DTO/userDTO.model"
 import UserModel from "../model/user.model"
-import { OkPacketParams, OkPacket, ResultSetHeader } from "mysql2" 
+import { ResultSetHeader } from "mysql2" 
 
 
 interface IUserService {
     registerUser(user: UserModel): Promise<UserModel>
     getAllUsers(): Promise<UserModel[]>
-    loginUser(user: UserDTOModel): Promise<UserDTOModel>
+    loginUser(user: UserDTOModel): Promise<UserModel[]>
 }
 
 class UserService implements IUserService {
@@ -43,8 +43,20 @@ class UserService implements IUserService {
             })
         })
     }
-    loginUser(user: UserDTOModel): Promise<UserDTOModel> {
-        throw new Error("Method not implemented.")
+
+    loginUser(user: UserDTOModel): Promise<UserModel[]> {
+        let query: string = `SELECT * FROM ruin_users WHERE username='${user.username}' AND pass='${user.pass}';`
+
+        return new Promise((resolve, reject) => {
+            connection.query<UserModel[]>(query, (e, res) => {
+                if (e) {
+                    logger.error(`User not found: ${e.message}`)
+                    reject(e)
+                } else {
+                    resolve(res)
+                }
+            })
+        })
     }
     
 }
