@@ -3,23 +3,13 @@ import { config } from './config'
 import { logger } from './logger'
 import { Connection } from 'mysql2/typings/mysql/lib/Connection'
 
-const connectToDB = async () => new Promise<Connection>((resolve, reject) => {
-    const access: ConnectionOptions = {
-        user: config.DB_USER,
-        database: 'test'
-    }
-    const connection = mysql.createConnection(access)
-
-    connection.connect((e) => {
-        if (e) {
-            reject(e)
-                logger.error(`Error connecting to database: ${e.message}`)
-            process.exit(1)
-        }
-        resolve(connection)
-        logger.info(`Connected To Database`)
-    })
-})
+const access: ConnectionOptions = {
+    host: config.DB_HOST,
+    user: config.DB_USER,
+    password: config.DB_PASS,
+    database: config.DB_NAME
+}
+const connection = mysql.createConnection(access)
 
 const Query = async (connection: Connection, query: string) => new Promise((resolve, reject) => {
     connection.query(query, connection, (err, res) => {
@@ -33,4 +23,4 @@ const Query = async (connection: Connection, query: string) => new Promise((reso
     })
 })
 
-export { connectToDB, Query }
+export { connection, Query }

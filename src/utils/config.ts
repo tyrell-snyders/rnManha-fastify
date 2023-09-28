@@ -10,6 +10,14 @@ const schema = Type.Object({
     }),
     DB_USER: Type.String({
         default: 'root'
+    }),
+    DB_PASS: Type.String(),
+    DB_NAME: Type.String(),
+    DB_HOST: Type.String({
+        default: 'localhost'
+    }),
+    DB_PORT: Type.Number({
+        default: 3306
     })
 })
 
