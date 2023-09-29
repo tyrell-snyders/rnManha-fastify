@@ -3,9 +3,15 @@ import fastify, { FastifyRequest, FastifyReply } from "fastify"
 import userService from "../services/user.service"
 import UserModel from "../model/user.model"
 import UserDTOModel from "../model/DTO/userDTO.model";
+import { Controller, GET, POST } from "fastify-decorators"
 
+@Controller()
 export default class UserController {
+
+    @POST()
     async registerUserHandler(req: FastifyRequest, reply: FastifyReply) {
+        reply.header("Access-Control-Allow-Origin", "*");
+        reply.header("Access-Control-Allow-Methods", "POST")
         try {
             const user = await userService.registerUser(req.body as UserModel);
             return reply.code(201).send("Successfully registered");
@@ -18,7 +24,10 @@ export default class UserController {
         }
     }
 
+    @GET()
     async getUsersHandler(req: FastifyRequest, reply: FastifyReply) {
+        reply.header("Access-Control-Allow-Origin", "*");
+        reply.header("Access-Control-Allow-Methods", "GET");
         try {
             logger.info(`Getting Users`)
             const users = await userService.getAllUsers()
@@ -35,7 +44,10 @@ export default class UserController {
         }
     }
 
+    @POST()
     async loginUserHandler(req: FastifyRequest, reply: FastifyReply) {
+        reply.header("Access-Control-Allow-Origin", "*");
+        reply.header("Access-Control-Allow-Methods", "POST");
         try {
             logger.info(`Logging in`)
             const result = await req.body as UserDTOModel
