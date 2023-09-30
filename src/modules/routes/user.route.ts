@@ -1,6 +1,7 @@
 import fastify, { FastifyInstance, FastifyPluginOptions } from 'fastify'
 import userController from '../controller/user.controller'
 import UserModel from '../model/user.model'
+import validateToken from '../../utils/validateToken'
 
 export function userRoute(
     app: FastifyInstance,
@@ -10,9 +11,15 @@ export function userRoute(
     const controller = new userController()
 
     app.get('/users', {
+        preHandler: validateToken,
         schema: {
             description: 'Gets all users',
             tags: ['User Authentication'],
+            security: [
+                {
+                    JWT: [], // Require Bearer token for /users route
+                },
+            ],
             response: {
                 200:{
                     type: 'object',
@@ -68,7 +75,7 @@ export function userRoute(
                         message: { type: 'string' }
                     }
                 }
-            }
+            },
         }
     }, controller.registerUserHandler)
 

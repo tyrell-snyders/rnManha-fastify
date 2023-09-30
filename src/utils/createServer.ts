@@ -46,7 +46,15 @@ export async function createServer() {
                         pass: { type: 'string' }
                     }
                 }
-            }
+            },
+            securityDefinitions: {
+                JWT: {
+                    type: 'apiKey',
+                    name: 'Authorization',
+                    in: 'header',
+                    description: 'JWT Token'
+                },
+            },
         },
     }   
 
