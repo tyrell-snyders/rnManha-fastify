@@ -3,6 +3,8 @@ import fastify, { FastifyRequest, FastifyReply } from "fastify"
 import userService from "../services/user.service"
 import UserModel from "../model/user.model"
 import UserDTOModel from "../model/DTO/userDTO.model";
+import jwt from 'jsonwebtoken'
+import { config } from "../../utils/config";
 
 export default class UserController {
 
@@ -64,8 +66,16 @@ export default class UserController {
                 }
 
                 // User found, return the user with success true
+                // token
+                const token = jwt.sign({
+                    usernmae: user[0].username,
+                    email: user[0].email,
+
+                }, config.SECRET_KEY_TOKEN, {expiresIn: '30d'})
+
                 return reply.code(200).send({
                     user,
+                    token,
                     success: true
                 });
             }

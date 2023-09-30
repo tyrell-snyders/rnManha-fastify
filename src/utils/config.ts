@@ -18,6 +18,9 @@ const schema = Type.Object({
     }),
     DB_PORT: Type.Number({
         default: 3306
+    }),
+    SECRET_KEY_TOKEN: Type.String({
+        default: ''
     })
 })
 

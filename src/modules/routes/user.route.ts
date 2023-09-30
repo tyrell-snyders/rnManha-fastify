@@ -90,15 +90,16 @@ export function userRoute(
                     properties: {
                         users: {
                             type: 'array',
-                            items: {
-                            type: 'object',
-                            properties: {
-                                username: { type: 'string' },
-                                email: { type: 'string' },
-                                password: { type: 'string' },
-                            },
+                                items: {
+                                type: 'object',
+                                properties: {
+                                    username: { type: 'string' },
+                                    email: { type: 'string' },
+                                    password: { type: 'string' },
+                                },
                             },
                         },
+                        token: { type: 'string' },
                         success: { type: 'boolean' },
                     },
                 },
