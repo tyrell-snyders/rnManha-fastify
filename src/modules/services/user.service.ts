@@ -3,6 +3,7 @@ import { connection } from "../../utils/mysql"
 import UserDTOModel from "../model/DTO/userDTO.model"
 import UserModel from "../model/user.model"
 import { ResultSetHeader } from "mysql2" 
+import bcrypt from 'bcrypt'
 
 
 interface IUserService {
@@ -12,11 +13,15 @@ interface IUserService {
 }
 
 class UserService implements IUserService {
-    registerUser(user: UserModel): Promise<UserModel> {
+    async registerUser(user: UserModel): Promise<UserModel> {
+        //Password Encryption
+        const genSalt = await bcrypt.genSalt(10)
+        const pass = await bcrypt.hash(user.pass, genSalt)
+
         return new Promise((resolve, reject) => {
             connection.query<ResultSetHeader>(
                 `INSERT INTO ruin_users (username, email, pass) VALUES(?,?,?);`,
-                [user.username, user.email, user.pass],
+                [user.username, user.email, pass],
                 (e, res) => {
                     if (e) {
                         logger.error(`Could not insert user into database: ${e.message}`)
@@ -30,7 +35,7 @@ class UserService implements IUserService {
         })
     }
 
-    getAllUsers(): Promise<UserModel[]> {
+    async getAllUsers(): Promise<UserModel[]> {
         let query: string = 'SELECT * FROM ruin_users;'
 
         return new Promise((resolve, reject) => {
@@ -44,16 +49,35 @@ class UserService implements IUserService {
         })
     }
 
-    loginUser(user: UserDTOModel): Promise<UserModel[]> {
-        let query: string = `SELECT * FROM ruin_users WHERE username='${user.username}' AND pass='${user.pass}';`
+    async loginUser(user: UserDTOModel): Promise<UserModel[]> {
+        if (!user) {
+            // Handle the case where user is undefined
+            throw new Error('User is undefined');
+        }   
+
+        const query: string = `SELECT * FROM ruin_users WHERE username='${user.username}';`
 
         return new Promise((resolve, reject) => {
-            connection.query<UserModel[]>(query, (e, res) => {
+            connection.query<UserModel[]>(query, async(e, res) => {
                 if (e) {
-                    logger.error(`User not found: ${e.message}`)
+                    logger.error(`Error querying user: ${e.message}`)
                     reject(e)
                 } else {
-                    resolve(res)
+                    if (res.length === 0) {
+                    // User not found
+                    resolve([]);
+                } else {
+                    const dbUser = res[0];
+                    const passwordValidation = await bcrypt.compare(user.pass, dbUser.pass);
+
+                    if (passwordValidation) {
+                        // Passwords match, return the user
+                        resolve([dbUser]);
+                    } else {
+                        // Passwords do not match
+                        resolve([]);
+                    }
+                }
                 }
             })
         })

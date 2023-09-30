@@ -14,7 +14,7 @@ export function userRoute(
             description: 'Gets all users',
             tags: ['User Authentication'],
             response: {
-                200: {
+                200:{
                     type: 'object',
                     properties: {
                         users: {
@@ -45,24 +45,20 @@ export function userRoute(
         schema: {
             description: 'User Registration',
             tags: ['User Authentication'],
-            params: {
+            body: {
                 type: 'object',
                 properties: {
                     username: { type: 'string' },
                     email: { type: 'string', format: 'email' },
-                    pass: { type: 'string'}
-                }
+                    pass: { type: 'string' }
+                },
+                required: ['username', 'email', 'pass'] // Add required properties
             },
             response: {
-                201: {
+                200: {
                     type: 'object',
                     properties: {
-                        user: { type: 'object', properties: {
-                            username: { type: 'string' },
-                            email: { type: 'string' },
-                            password: { type: 'string' }
-                        
-                        }},
+                        message: { type: 'string' },
                         success: { type: 'boolean' }
                     }
                 },
@@ -80,12 +76,13 @@ export function userRoute(
         schema: {
             description: 'User Login',
             tags: ['User Authentication'],
-            params: {
+            body: {
                 type: 'object',
                 properties: {
                     username: { type: 'string' },
                     pass: { type: 'string'}
-                }
+                },
+                required: ['username', 'pass']
             },
             response: {
                 201: {
@@ -108,13 +105,16 @@ export function userRoute(
                 404: {
                     type: 'object',
                     properties: {
-                        message: { type: 'string' }
+                        message: { type: 'string' },
+                        success: { type: 'boolean'}
                     }
                 },
                 400: {
                     type: 'object',
                     properties: {
                         message: { type: 'string' },
+                        error: { type: 'string' },
+                        success: { type: 'boolean' }
                     }
                 }
             }

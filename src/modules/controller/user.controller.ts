@@ -10,8 +10,11 @@ export default class UserController {
         reply.header("Access-Control-Allow-Origin", "*");
         reply.header("Access-Control-Allow-Methods", "POST")
         try {
-            const user = await userService.registerUser(req.body as UserModel);
-            return reply.code(201).send("Successfully registered");
+            await userService.registerUser(req.body as UserModel);
+            return reply.code(201).send({
+                message: "Successfully registered",
+                success: true
+            });
         } catch (e) {
             logger.error(e, `registerUserHandler error`);
             return reply.code(500).send({
@@ -43,23 +46,35 @@ export default class UserController {
         reply.header("Access-Control-Allow-Origin", "*");
         reply.header("Access-Control-Allow-Methods", "POST");
         try {
-            logger.info(`Logging in`)
-            const result = await req.body as UserDTOModel
-            if (!result)
+            if (req.body == null) {
                 return reply.code(404).send({
-                    message: "User not found"
-                })
+                    message: "User not found",
+                    success: false 
+                });
+            } else {
+                const result = req.body as UserDTOModel;
+                const user = await userService.loginUser(result);
 
-            const user = await userService.loginUser(result)
-            return reply.code(200).send({
-                user,
-                success: true
-            })
+                if (user.length === 0) {
+                    // User not found, return the 404 response
+                    return reply.code(404).send({
+                        message: "User not found",
+                        success: false
+                    });
+                }
+
+                // User found, return the user with success true
+                return reply.code(200).send({
+                    user,
+                    success: true
+                });
+            }
         } catch (e) {
             logger.error(e, `loginUserHandler err`)
             return reply.code(400).send({
                 message: "Error Logging in",
-                e
+                e,
+                success: false
             })
         }
     }

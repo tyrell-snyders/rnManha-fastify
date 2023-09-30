@@ -19,6 +19,7 @@
         "@sinclair/typebox": "^0.31.17",
         "@typegoose/typegoose": "^11.5.0",
         "@types/cors": "^2.8.14",
+        "bcryptjs": "^2.4.3",
         "cors": "^2.8.5",
         "env-schema": "^5.2.0",
         "fastify": "^4.23.2",
