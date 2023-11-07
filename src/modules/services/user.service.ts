@@ -4,6 +4,7 @@ import UserDTOModel from "../model/DTO/userDTO.model"
 import UserModel from "../model/user.model"
 import { ResultSetHeader } from "mysql2" 
 import bcrypt from 'bcrypt'
+import LoginDTOModel from "../model/DTO/loginDTO.model"
 
 
 interface IUserService {
@@ -69,7 +70,6 @@ class UserService implements IUserService {
                 } else {
                     const dbUser = res[0];
                     const passwordValidation = await bcrypt.compare(user.pass, dbUser.pass);
-
                     if (passwordValidation) {
                         // Passwords match, return the user
                         resolve([dbUser]);
