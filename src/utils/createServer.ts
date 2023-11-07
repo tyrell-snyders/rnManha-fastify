@@ -10,8 +10,9 @@ export async function createServer() {
     const app = fastify()
 
     app.register(fastifyCors, {
-        origin: '*',
-        methods: ['GET', 'POST']
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST', 'OPTIONS'],
+        allowedHeaders: 'Content-Type'
     })
 
     const swaggerOptions = {
