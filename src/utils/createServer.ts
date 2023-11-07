@@ -10,7 +10,7 @@ export async function createServer() {
     const app = fastify()
 
     app.register(fastifyCors, {
-        origin: 'http://localhost:3000',
+        origin: '*',
         methods: ['GET', 'POST', 'OPTIONS'],
         allowedHeaders: 'Content-Type'
     })
