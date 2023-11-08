@@ -38,14 +38,20 @@ class UserService implements IUserService {
     async getAllUsers(): Promise<UserModel[]> {
         let query: string = 'SELECT * FROM ruin_users;'
 
-        return new Promise((resolve, reject) => {
-            connection.query<UserModel[]>(query, (e, res) => {
-                if (e) {
-                    logger.error(`Could not insert user into database: ${e.message}`)
+        return new Promise(async (resolve, reject) => {
+            try {
+                //Get all users
+                const dbUsers = await prisma.ruinUser.findMany({}) as UserModel[]
+                if (dbUsers.length > 0)
+                    resolve(dbUsers)
+                else
+                    resolve([])
+            } catch (e) {
+                if (e instanceof Error) {
+                    logger.error(`Error: ${e.message}`)
                     reject(e)
-                } else
-                    resolve(res)
-            })
+                }
+            }
         })
     }
 
