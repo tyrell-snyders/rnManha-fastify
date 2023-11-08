@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken'
-import fastify, { FastifyRequest, FastifyReply } from "fastify"
+import { FastifyRequest, FastifyReply } from "fastify"
 import { config } from './config'
 
 export default async (req: FastifyRequest, reply: FastifyReply) => {

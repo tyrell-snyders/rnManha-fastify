@@ -1,5 +1,5 @@
 import { logger } from "../../utils/logger"
-import fastify, { FastifyRequest, FastifyReply } from "fastify"
+import { FastifyRequest, FastifyReply } from "fastify"
 import userService from "../services/user.service"
 import UserModel from "../model/user.model"
 import UserDTOModel from "../model/DTO/userDTO.model";

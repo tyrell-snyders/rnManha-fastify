@@ -18,26 +18,31 @@ class UserService implements IUserService {
         const genSalt = await bcrypt.genSalt(10)
         const pass = await bcrypt.hash(user.pass, genSalt)
 
-        return new Promise((resolve, reject) => {
-            connection.query<ResultSetHeader>(
-                `INSERT INTO ruin_users (username, email, pass) VALUES(?,?,?);`,
-                [user.username, user.email, pass],
-                (e, res) => {
-                    if (e) {
-                        logger.error(`Could not insert user into database: ${e.message}`)
-                        reject(e)
-                    } else {    
-                        const insertedUser = { ...user, id: res.insertId };
-                        resolve(insertedUser);
+        return new Promise(async (resolve, reject) => {
+            try {
+                //Create new user
+                const newUser = await prisma.ruinUser.create({
+                    data: {
+                        username: user.username,
+                        email: user.email,
+                        pass
                     }
+                })
+
+                if (newUser) {
+                    const dbUser = { ...user, id: newUser.id }
+                    resolve(dbUser)
                 }
-            )
+            } catch (e) {
+                if (e instanceof Error) {
+                    logger.error(`Error: ${e.message}`)
+                    reject(e)
+                }
+            }
         })
     }
 
     async getAllUsers(): Promise<UserModel[]> {
-        let query: string = 'SELECT * FROM ruin_users;'
-
         return new Promise(async (resolve, reject) => {
             try {
                 //Get all users
