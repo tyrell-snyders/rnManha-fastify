@@ -4,6 +4,7 @@ import UserDTOModel from "../model/DTO/userDTO.model"
 import UserModel from "../model/user.model"
 import { ResultSetHeader } from "mysql2" 
 import bcrypt from 'bcrypt'
+import prisma from '../../utils/lib/prismaDB'
 
 interface IUserService {
     registerUser(user: UserModel): Promise<UserModel>
@@ -54,36 +55,28 @@ class UserService implements IUserService {
             throw new Error('User is undefined');
         }   
 
-        const query: string = `SELECT * FROM ruin_users WHERE username='${user.username}';`;
-
-        return new Promise((resolve, reject) => {
-            connection.query<UserModel[]>(query, async (e, res) => {
-                if (e) {
-                    logger.error(`Error querying user: ${e.message}`);
-                    reject(e);
-                } else {
-                    if (res.length === 0) {
-                        // User not found
-                        resolve([]);
+        return new Promise(async (resolve, reject) => {
+                try {
+                    //Find user with username
+                    const dbUser = await prisma.ruinUser.findFirst({
+                        where: { username: user.username }
+                    }) as UserModel;
+                    const { pass, ...secureUser } = dbUser;
+                    const passwordValidation = await bcrypt.compare(user.pass, dbUser?.pass)
+                    if (passwordValidation) {
+                        // Passwords match, return the user without the password
+                        resolve([secureUser as UserModel]);
                     } else {
-                        const dbUser = res[0];
-
-                        // Remove the password field from the user object
-                        const { pass, ...secureUser } = dbUser;
-
-                        const passwordValidation = await bcrypt.compare(user.pass, dbUser.pass);
-                        if (passwordValidation) {
-                            // Passwords match, return the user without the password
-                            resolve([secureUser as UserModel]);
-                        } else {
-                            // Passwords do not match
-                            resolve([]);
-                        }
+                        // User not found, return empty array
+                        resolve([])
+                    }
+                } catch (e) {
+                    if (e instanceof Error) {
+                        console.log(e.message)
+                        reject(e)
                     }
                 }
-            });
         });
-    
     }
 }
 

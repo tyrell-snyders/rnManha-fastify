@@ -16,6 +16,7 @@
         "@fastify/swagger": "^8.10.1",
         "@fastify/swagger-ui": "^1.9.3",
         "@fastify/type-provider-json-schema-to-ts": "^2.2.2",
+        "@prisma/client": "^5.5.2",
         "@sinclair/typebox": "^0.31.17",
         "@typegoose/typegoose": "^11.5.0",
         "@types/cors": "^2.8.14",
