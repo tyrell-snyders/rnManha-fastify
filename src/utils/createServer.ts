@@ -3,7 +3,6 @@ import { userRoute } from "../modules/routes/user.route"
 import fastifySwagger from '@fastify/swagger'
 import { version } from '../../package.json'
 import fastifySwaggerUi from "@fastify/swagger-ui"
-import { config } from "./config"
 import fastifyCors from "@fastify/cors"
 
 export async function createServer() {

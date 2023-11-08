@@ -1,6 +1,5 @@
-import fastify, { FastifyInstance, FastifyPluginOptions } from 'fastify'
+import { FastifyInstance, FastifyPluginOptions } from 'fastify'
 import userController from '../controller/user.controller'
-import UserModel from '../model/user.model'
 import validateToken from '../../utils/validateToken'
 
 export function userRoute(

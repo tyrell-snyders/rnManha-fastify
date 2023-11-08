@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model RuinUser {
+  id       Int    @id @unique(map: "id_UNIQUE") @default(autoincrement())
+  username String @db.VarChar(45)
+  email    String @db.VarChar(45)
+  pass     String @db.VarChar(99)
+
+  @@map("ruin_users") //Still uses the ruin_user table, just changed the virtual name of the table
+}
