@@ -4,6 +4,7 @@ import fastifySwagger from '@fastify/swagger'
 import { version } from '../../package.json'
 import fastifySwaggerUi from "@fastify/swagger-ui"
 import fastifyCors from "@fastify/cors"
+import { favouritesRoute } from "../modules/routes/favourites.route"
 
 export async function createServer() {
     const app = fastify()
@@ -69,6 +70,7 @@ export async function createServer() {
     
     
     app.register(userRoute, { prefix: '/api/auth' })
+    app.register(favouritesRoute, { prefix: '/api/favourites' })
 
     return app
 }
