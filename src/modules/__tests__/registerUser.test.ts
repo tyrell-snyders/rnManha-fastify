@@ -2,6 +2,7 @@ import { describe, it, vi, expect } from 'vitest'
 import { createServer } from '../../utils/createServer'
 import userService from '../services/user.service'
 import UserModel from '../model/user.model'
+import { logger } from '../../utils/logger'
 
 describe('Post "/api/auth/register" route', () => {
     it('should call the registerUser service', async () => {
@@ -31,5 +32,7 @@ describe('Post "/api/auth/register" route', () => {
             url: '/api/auth/register',
             payload
         })
+
+        console.log(response.json())
     })
 })

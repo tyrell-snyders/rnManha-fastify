@@ -71,7 +71,7 @@ export default class UserController {
                     usernmae: user[0].username,
                     email: user[0].email,
 
-                }, config.SECRET_KEY_TOKEN, {expiresIn: '30d'})
+                }, config.SECRET_KEY_TOKEN, {expiresIn: '15m'})
 
                 return reply.code(200).send({
                     user,
