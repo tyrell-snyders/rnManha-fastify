@@ -10,28 +10,29 @@ interface Favourites {
 }
 
 interface IFavouritesService {
-    addToFavourites(userID: number, mangaID: string, mangaTitle: string): Promise<Favourites>
+    addToFavourites(favourite: FavouritesModel): Promise<Favourites>
 }
 
 class FavouritesService implements IFavouritesService {
-    async addToFavourites(userID: number, mangaID: string, mangaTitle: string): Promise<Favourites> {
+    async addToFavourites(favourite: FavouritesModel): Promise<Favourites> {
         try {
-        const favourites = (await prisma.favourites.create({
-            data: {
-            user_id: userID,
-            manga_title: mangaTitle,
-            comic_id: mangaID,
-            },
-        })) as FavouritesModel;
+            const {user_id, manga_title, comic_id} = favourite
+            const favourites = (await prisma.favourites.create({
+                data: {
+                    user_id,
+                    manga_title, 
+                    comic_id,
+                },
+            })) as FavouritesModel;
 
-        logger.info(`Favourite added successfully!`);
+            logger.info(`Favourite added successfully!`);
 
-        const fav: Favourites = {
-            Favourites: favourites,
-            message: "Favourite added successfully!",
-        };
+            const fav: Favourites = {
+                Favourites: favourites,
+                message: "Favourite added successfully!",
+            };
 
-        return fav;
+            return fav;
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 // Handle known DB errors
