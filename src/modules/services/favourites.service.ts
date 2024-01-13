@@ -11,6 +11,7 @@ interface Favourites {
 
 interface IFavouritesService {
     addToFavourites(favourite: FavouritesModel): Promise<Favourites>
+    getFavourites(user_id: number): Promise<FavouritesModel[]>
 }
 
 class FavouritesService implements IFavouritesService {
@@ -50,6 +51,27 @@ class FavouritesService implements IFavouritesService {
                 };
             }
         }
+    }
+
+    async getFavourites(user_id: number): Promise<FavouritesModel[]> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                //Get Favourites
+                const favourites = await prisma.favourites.findMany({ where: { user_id } }) as FavouritesModel[]
+                if (favourites.length > 0)
+                    resolve(favourites)
+                else
+                    resolve([])
+            } catch (e) {
+                if (e instanceof PrismaClientKnownRequestError) {
+                    logger.error(`DBError: ${e}`)
+                    reject(e)
+                } else {
+                    logger.error(`DBError: ${e}`)
+                    reject(e)
+                }
+            }
+        })
     }
 
 }

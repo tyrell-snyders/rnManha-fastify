@@ -21,4 +21,26 @@ export default class FavouritesController {
             });
         }
     }
+
+    async getFavouritesHandler(req: FastifyRequest, reply: FastifyReply) {
+        reply.header("Access-Control-Allow-Origin", "*");
+        reply.header("Access-Control-Allow-Methods", "GET");
+
+        try {
+            logger.info(`Getting Favourites`);
+            const { id } = await req.params as { id: number }
+            const favourites = await favouritesService.getFavourites(id);
+
+            return reply.code(200).send({
+                favourites
+            })
+        } catch (error) {
+            logger.error(error);
+            return reply.code(500).send({
+                message: "Error getting favourites",
+                error
+            });
+        }
+    }
 }
+
