@@ -3,26 +3,28 @@ import FavouritesModel from "../model/favourites.model"
 import prisma from '../../utils/lib/prismaDB'
 import DatabaseError from "../../utils/lib/database-error"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
+import { FavouriteData, Favourites } from "../../utils/interface"
+import UserModel from "../model/user.model"
 
-interface Favourites {
-    Favourites: FavouritesModel;
-    message: string;
-}
 
 interface IFavouritesService {
-    addToFavourites(favourite: FavouritesModel): Promise<Favourites>
+    addToFavourites(favourite: FavouriteData): Promise<Favourites>
     getFavourites(user_id: number): Promise<FavouritesModel[]>
 }
 
 class FavouritesService implements IFavouritesService {
-    async addToFavourites(favourite: FavouritesModel): Promise<Favourites> {
+    async addToFavourites(favourite: FavouriteData): Promise<Favourites> {
         try {
-            const {user_id, manga_title, comic_id} = favourite
+            const {userName, comicTitle, comicID} = favourite
+
+            //find user
+            const user = await prisma.ruinUser.findFirst({ where: { username: userName } }) as UserModel;
+            //create Favourite
             const favourites = (await prisma.favourites.create({
                 data: {
-                    user_id,
-                    manga_title, 
-                    comic_id,
+                    user_id: user.id,
+                    manga_title: comicTitle, 
+                    comic_id: comicID,
                 },
             })) as FavouritesModel;
 

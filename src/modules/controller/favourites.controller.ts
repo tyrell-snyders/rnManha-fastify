@@ -1,7 +1,8 @@
 import { logger } from "../../utils/logger"
 import { FastifyRequest, FastifyReply } from "fastify"
 import favouritesService from "../services/favourites.service";
-import FavouritesModel from "../model/favourites.model";
+// import FavouritesModel from "../model/favourites.model";
+import { FavouriteData } from "../../utils/interface";
 
 export default class FavouritesController {
     async addFavouriteHandler(req: FastifyRequest, reply: FastifyReply) {
@@ -9,7 +10,7 @@ export default class FavouritesController {
         reply.header("Access-Control-Allow-Methods", "POST");
 
         try {
-            const favourites = await favouritesService.addToFavourites(req.body as FavouritesModel);
+            const favourites = await favouritesService.addToFavourites(req.body as FavouriteData);
             return reply.code(201).send({
                 favourites
             })
