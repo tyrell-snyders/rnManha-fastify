@@ -45,11 +45,11 @@ export function favouritesRoute(
             body: {
                 type: 'object',
                     properties: {
-                        user_id: { type: 'number' },
-                        comic_id: { type:'string' },
-                        manga_title: { type:'string' }
+                        userName: { type: 'string' },
+                        comicID: { type:'string' },
+                        comicTitle: { type:'string' }
                     },
-                required: ['user_id', 'comic_id','manga_title']
+                required: ['userName', 'comicID','comicTitle']
             },
             response: {
                 201: {
