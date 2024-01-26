@@ -28,9 +28,8 @@ export default class FavouritesController {
         reply.header("Access-Control-Allow-Methods", "GET");
 
         try {
-            logger.info(`Getting Favourites`);
-            const { id } = await req.params as { id: number }
-            const favourites = await favouritesService.getFavourites(id);
+            const { user_id } = req.query as { user_id: number }
+            const favourites = await favouritesService.getFavourites(user_id);
 
             return reply.code(200).send({
                 favourites

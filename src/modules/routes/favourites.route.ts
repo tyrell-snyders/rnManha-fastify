@@ -38,7 +38,7 @@ export function favouritesRoute(
         }
     }, controller.getFavouritesHandler)
 
-    app.post('/', {
+    app.post('/add', {
         schema: {
             description: 'Add a favourite comic',
             tags: ['Favourites'],

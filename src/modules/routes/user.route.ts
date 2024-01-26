@@ -26,12 +26,12 @@ export function userRoute(
                         users: {
                             type: 'array',
                             items: {
-                            type: 'object',
-                            properties: {
-                                username: { type: 'string' },
-                                email: { type: 'string' },
-                                password: { type: 'string' },
-                            },
+                                type: 'object',
+                                properties: {
+                                    username: { type: 'string' },
+                                    email: { type: 'string' },
+                                    password: { type: 'string' },
+                                },
                             },
                         },
                         success: { type: 'boolean' },
@@ -99,6 +99,7 @@ export function userRoute(
                                 items: {
                                 type: 'object',
                                 properties: {
+                                    id: {type: 'number'},
                                     username: { type: 'string' },
                                     email: { type: 'string' }
                                 },

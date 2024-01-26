@@ -59,11 +59,16 @@ class FavouritesService implements IFavouritesService {
         return new Promise(async (resolve, reject) => {
             try {
                 //Get Favourites
-                const favourites = await prisma.favourites.findMany({ where: { user_id } }) as FavouritesModel[]
-                if (favourites.length > 0)
-                    resolve(favourites)
-                else
+                if (user_id === undefined) {
+                    logger.info(`User id is undefined`)
                     resolve([])
+                } else {
+                    const favourites = await prisma.favourites.findMany({ where: { user_id: user_id } }) as FavouritesModel[]
+                    if (favourites.length > 0)
+                        resolve(favourites)
+                    else
+                        resolve([])
+                }
             } catch (e) {
                 if (e instanceof PrismaClientKnownRequestError) {
                     logger.error(`DBError: ${e}`)
