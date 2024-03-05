@@ -57,7 +57,7 @@ export default class UserController {
                 const result = req.body as UserDTOModel;
                 const user = await userService.loginUser(result);
 
-                if (user.length === 0) {
+                if (Object.keys(user).length === 0) {
                     // User not found, return the 404 response
                     return reply.code(404).send({
                         message: "User not found",
@@ -73,8 +73,7 @@ export default class UserController {
 
                 }, config.SECRET_KEY_TOKEN, {expiresIn: '15m'})
 
-                return reply.code(200).send({
-                    user,
+                return reply.code(201).send({
                     token,
                     success: true
                 });

@@ -6,7 +6,6 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 import { FavouriteData, Favourites } from "../../utils/interface"
 import UserModel from "../model/user.model"
 
-
 interface IFavouritesService {
     addToFavourites(favourite: FavouriteData): Promise<Favourites>
     getFavourites(user_id: number): Promise<FavouritesModel[]>

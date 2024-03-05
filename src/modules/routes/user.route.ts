@@ -61,7 +61,7 @@ export function userRoute(
                 required: ['username', 'email', 'pass'] // Add required properties
             },
             response: {
-                200: {
+                201: {
                     type: 'object',
                     properties: {
                         message: { type: 'string' },
@@ -94,17 +94,6 @@ export function userRoute(
                 201: {
                     type: 'object',
                     properties: {
-                        users: {
-                            type: 'array',
-                                items: {
-                                type: 'object',
-                                properties: {
-                                    id: {type: 'number'},
-                                    username: { type: 'string' },
-                                    email: { type: 'string' }
-                                },
-                            },
-                        },
                         token: { type: 'string' },
                         success: { type: 'boolean' },
                     },
