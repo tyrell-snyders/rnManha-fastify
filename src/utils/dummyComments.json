@@ -1,0 +1,53 @@
+{
+    "Comments": [{
+            "id": 1,
+            "userId": 1,
+            "downvotes": 30,
+            "upvotes": 0,
+            "comment": "This chapter is great!",
+            "chapterId": "hsiifnvods993nklg",
+            "createdAt": "now",
+            "updatedAt": ""
+        },
+        {
+            "id": 2,
+            "userId": 2,
+            "downvotes": 20,
+            "upvotes": 10,
+            "comment": "This chapter sucked!!",
+            "chapterId": "hsiifnvods993nklg",
+            "createdAt": "now",
+            "updatedAt": ""
+        },
+        {
+            "id": 3,
+            "userId": 3,
+            "downvotes": 10,
+            "upvotes": 190,
+            "comment": "Why? Just why?",
+            "chapterId": "hsiifnvods993nklg",
+            "createdAt": "yesterday",
+            "updatedAt": ""
+        },
+        {
+            "id": 4,
+            "userId": 2,
+            "downvotes": 20,
+            "upvotes": 10,
+            "comment": "Hmmmm",
+            "chapterId": "tyomkjkgl",
+            "createdAt": "now",
+            "updatedAt": ""
+        },
+        {
+            "id": 5,
+            "userId": 4,
+            "downvotes": 20,
+            "upvotes": 10,
+            "comment": "Hmmmm",
+            "chapterId": "How did he get stronger? It doesn't make sense!!!",
+            "createdAt": "now",
+            "updatedAt": ""
+        }
+    ]
+}
