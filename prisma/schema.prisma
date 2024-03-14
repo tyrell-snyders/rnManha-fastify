@@ -12,6 +12,7 @@ model RuinUser {
   username   String       @db.VarChar(45)
   email      String       @db.VarChar(45)
   pass       String       @db.VarChar(99)
+  comments   comments[]
   favourites Favourites[]
 
   @@map("ruin_users")
@@ -26,4 +27,19 @@ model Favourites {
 
   @@index([user_id], map: "user_id")
   @@map("favourites")
+}
+
+model comments {
+  id         Int       @id @default(autoincrement())
+  comment    String    @db.VarChar(256)
+  user_id    Int?
+  chapter_id String    @db.VarChar(99)
+  createdAt  DateTime  @default(now()) @db.DateTime(0)
+  updatedAt  DateTime  @default(now()) @db.DateTime(0)
+  upVotes    Int?
+  downVotes  Int?
+  edited     Boolean?
+  ruin_users RuinUser? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id_to_id")
+
+  @@index([user_id], map: "fk_user_id_to_id")
 }
