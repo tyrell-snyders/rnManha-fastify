@@ -10,3 +10,14 @@ export interface FavouriteData {
     comicID: string;
     comicTitle: string;
 }
+
+export interface CommentData {
+    user_id: number;
+    comment: string;
+    chapter_id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    upVotes: number;
+    downVotes: number;
+    edited: Boolean;
+}
