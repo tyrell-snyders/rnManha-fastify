@@ -83,5 +83,45 @@ export function commentsRoute(
         }
     }, controller.addCommentHandler)
 
+    app.put('/edit-comment', {
+        preHandler: validateToken,
+        schema: {
+            description: 'Edit Comment',
+            tags: ['Comments'],
+            security: [
+                {
+                    JWT: [], //Require Bearer token for authorization
+                }
+            ],
+            body: {
+                type: 'object',
+                    properties: {
+                        user_id: {type: 'number'},
+                        comment: {type: 'string'},
+                        chapter_id: {type: 'string'},
+                        upVotes: {type: 'number'},
+                        downVotes: {type: 'number'}
+                    },
+                    required: ['user_id', 'comment', 'chapter_id']
+            },
+            response: {
+                201: {
+                    type: 'object',
+                    properties: {
+                        result: {
+                            type: 'array'
+                        }
+                    }
+                },
+                500: {
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string' }
+                    }
+                }
+            }
+        }
+    }, controller.editCommentHandler)
+
     done()
 }

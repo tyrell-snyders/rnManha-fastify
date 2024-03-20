@@ -3,6 +3,17 @@ import { FastifyRequest, FastifyReply } from "fastify"
 import commentsService from "../services/comments.service";
 import { CommentData } from "../../utils/interface";
 
+class Comments {
+    constructor(
+        public id: number,
+        public userId: number, 
+        public upvotes: number,
+        public downvotes: number,
+        public comment: string,
+        public chapterId: string,
+    ) {}
+}
+
 export default class CommentsController {
     async getChapterCommentsHandler(req: FastifyRequest, reply: FastifyReply) {
         reply.header("Access-Control-Allow-Origin", "*");
@@ -44,6 +55,28 @@ export default class CommentsController {
             }
         } catch (e) {
             logger.error(e, 'addCommentHandler')
+        }
+    }
+
+    async editCommentHandler(req: FastifyRequest, reply: FastifyReply) {
+        reply.header("Access-Control-Allow-Origin", "*");
+        reply.header("Access-Control-Allow-Methods", "PUT");
+
+        try {
+            if (req.body === null) 
+                return reply.code(400).send({
+                    message: "No data",
+                    success: false
+                })
+            
+            const data = req.body as Comments
+            const result = await commentsService.editComment(data)
+            return reply.code(201).send({
+                result
+            })
+
+        } catch (e) {
+            logger.error(e, 'editCommentHandler')
         }
     }
 }

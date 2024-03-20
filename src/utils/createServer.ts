@@ -70,8 +70,7 @@ export async function createServer() {
     app.register(fastifySwagger, swaggerOptions)
     app.register(fastifySwaggerUi, swaggerUiOptions)
 
-    
-    
+   
     app.register(userRoute, { prefix: '/api/auth' })
     app.register(favouritesRoute, { prefix: '/api/favourites' })
     app.register(commentsRoute, { prefix: '/api/comments' })

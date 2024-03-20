@@ -5,8 +5,9 @@ import { CommentData } from "../../utils/interface"
 import prisma from '../../utils/lib/prismaDB'
 
 interface ICommentsService {
-    getChapterComments(chapterId: string): Promise<CommentsModel>
+    getChapterComments(chapterId: string): Promise<CommentsModel[]>
     addChapterComment(data: CommentData): Promise<String>
+    editComment(data: Comments): Promise<CommentsModel[] | []>
 }
 
 class Comments {
@@ -17,13 +18,11 @@ class Comments {
         public downvotes: number,
         public comment: string,
         public chapterId: string,
-        public createdAt: string,
-        public updatedAt: string
     ) {}
 }
 
 class CommentsService implements ICommentsService {
-        async addChapterComment(data: CommentData): Promise<String> {
+    async addChapterComment(data: CommentData): Promise<String> {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!data)
@@ -56,34 +55,51 @@ class CommentsService implements ICommentsService {
         })
     }
 
-    async getChapterComments(chapterId: string): Promise<CommentsModel> {
+    async getChapterComments(chapterId: string): Promise<CommentsModel[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 //Get all comments
-                const cmnts = new Map()
+                if (chapterId === null)
+                    reject('Invalid chapterId.')
 
-                for (const comment of comments.Comments) {
-                    const models = cmnts.get(comment.chapterId) || []
-                    const model = new Comments(
-                        comment.id,
-                        comment.userId,
-                        comment.upvotes,
-                        comment.downvotes,
-                        comment.comment, 
-                        comment.chapterId,
-                        comment.createdAt,
-                        comment.updatedAt
-                    )
-                    models.push(model)
+                const comments = await prisma.comments.findMany({
+                    where: { chapter_id: chapterId }
+                }) as CommentsModel[]
 
-                    cmnts.set(comment.chapterId, models)
-                }
-
-                const models = cmnts.get(chapterId) || []
-                if (models.length > 0) 
-                    resolve(models)
+                if (comments && comments.length > 0)
+                    resolve(comments)
                 else
-                    reject(new Error("No comments found"))
+                    reject('No comments found.')
+            } catch (e) {
+                if (e instanceof Error) {
+                    logger.error(`Error: ${e.message}`)
+                    reject(e)
+                }
+            }
+        })
+    }
+
+    async editComment(data: Comments): Promise<CommentsModel[] | []> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!data)
+                    reject('Invalid data.')
+
+                const newComment = await prisma.comments.update({
+                    where: { id: data.id },
+                    data: { comment: data.comment, edited: true, updatedAt: new Date().toISOString() },
+                }) as CommentsModel
+
+                if (newComment) {
+                    const comments = await prisma.comments.findMany({
+                        where: { id: newComment.id }
+                    }) as CommentsModel[]
+
+                    resolve(comments)
+                } else {
+                    reject('No comments found.')
+                    resolve([])
+                }
             } catch (e) {
                 if (e instanceof Error) {
                     logger.error(`Error: ${e.message}`)
