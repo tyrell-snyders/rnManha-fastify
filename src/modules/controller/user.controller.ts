@@ -68,6 +68,7 @@ export default class UserController {
                 // User found, return the user with success true
                 // token
                 const token = jwt.sign({
+                    id: user[0].id,
                     usernmae: user[0].username,
                     email: user[0].email,
 

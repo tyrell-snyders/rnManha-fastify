@@ -1,6 +1,5 @@
 import { logger } from "../../utils/logger"
 import CommentsModel from "../model/comments.model"
-import comments from "../../utils/dummyComments.json"
 import { CommentData } from "../../utils/interface"
 import prisma from '../../utils/lib/prismaDB'
 

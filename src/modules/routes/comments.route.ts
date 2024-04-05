@@ -9,15 +9,9 @@ export function commentsRoute(
 ) {
     const controller = new CommentsController()
     app.get('/get-chapter-comments', {
-        preHandler: validateToken,
         schema: {
             description: 'Get all chapter comments',
             tags: ['Comments'],
-            security: [
-                {
-                    JWT: [], // Require Bearer token for authorization
-                },
-            ],
             querystring: {
                 type: 'object',
                 properties: {
