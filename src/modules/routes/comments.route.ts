@@ -117,5 +117,45 @@ export function commentsRoute(
         }
     }, controller.editCommentHandler)
 
+    app.delete('/delete-comment', {
+        preHandler: validateToken,
+        schema: {
+            description: 'Delete Comment',
+            tags: ['Comments'],
+            security: [
+                {
+                    JWT: [], //Require Bearer token for authorization
+                }
+            ],
+            querystring: {
+                type: 'object',
+                properties: {
+                    commentId: { type: 'number' }
+                },
+                required: ['commentId']
+            },
+            response: {
+                200: {
+                    type: 'object',
+                    properties: {
+                        result: { type:'string' }
+                    }
+                },
+                204: {
+                    type: 'object',
+                    properties: {
+                        result: { type:'string' }
+                    }
+                },
+                500: {
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string' }
+                    }
+                }
+            }
+        }
+    }, controller.deleteCommentHandler)
+
     done()
 }

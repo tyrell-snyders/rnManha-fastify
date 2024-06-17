@@ -10,15 +10,9 @@ export function userRoute(
     const controller = new userController()
 
     app.get('/users', {
-        preHandler: validateToken,
         schema: {
             description: 'Gets all users',
             tags: ['User Authentication'],
-            security: [
-                {
-                    JWT: [], // Require Bearer token for /users route
-                },
-            ],
             response: {
                 200:{
                     type: 'object',
@@ -28,6 +22,7 @@ export function userRoute(
                             items: {
                                 type: 'object',
                                 properties: {
+                                    id: { type: 'number' },
                                     username: { type: 'string' },
                                     email: { type: 'string' },
                                     password: { type: 'string' },

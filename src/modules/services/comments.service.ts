@@ -7,6 +7,7 @@ interface ICommentsService {
     getChapterComments(chapterId: string): Promise<CommentsModel[]>
     addChapterComment(data: CommentData): Promise<String>
     editComment(data: Comments): Promise<CommentsModel[] | []>
+    deleteComment(commentId: number): Promise<String>
 }
 
 class Comments {
@@ -21,6 +22,7 @@ class Comments {
 }
 
 class CommentsService implements ICommentsService {
+    //Post
     async addChapterComment(data: CommentData): Promise<String> {
         return new Promise(async (resolve, reject) => {
             try {
@@ -54,12 +56,18 @@ class CommentsService implements ICommentsService {
         })
     }
 
+    //Get
     async getChapterComments(chapterId: string): Promise<CommentsModel[]> {
         return new Promise(async (resolve, reject) => {
             try {
                 //Get all comments
                 if (chapterId === null)
                     reject('Invalid chapterId.')
+
+                /*
+                    TODO:
+                    Cache the comments in a redis cache.
+                */
 
                 const comments = await prisma.comments.findMany({
                     where: { chapter_id: chapterId }
@@ -78,12 +86,16 @@ class CommentsService implements ICommentsService {
         })
     }
 
+    //Update
     async editComment(data: Comments): Promise<CommentsModel[] | []> {
         return new Promise(async (resolve, reject) => {
             try {
                 if (!data)
                     reject('Invalid data.')
 
+                /* TODO:
+                    Only allow users to update their own comments. Use the userId to help. BULK requests
+                 */
                 const newComment = await prisma.comments.update({
                     where: { id: data.id },
                     data: { comment: data.comment, edited: true, updatedAt: new Date().toISOString() },
@@ -103,6 +115,29 @@ class CommentsService implements ICommentsService {
                 if (e instanceof Error) {
                     logger.error(`Error: ${e.message}`)
                     reject(e)
+                }
+            }
+        })
+    }
+
+    //Delete
+    async deleteComment(commentId: number): Promise<String> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!commentId)
+                    reject('Invalid commentId.')
+                /* TODO:
+                    Only allow users to delete their own comments. Use the userId to help. BULK requests.
+                 */
+                await prisma.comments.delete({
+                    where: { id: commentId }
+                })
+                resolve('Comment deleted successfully.')
+            } catch (e) {
+                if (e instanceof Error) {
+                    logger.error(`Error: ${e.message}`)
+                    reject(e)
+                    resolve(e.message)
                 }
             }
         })

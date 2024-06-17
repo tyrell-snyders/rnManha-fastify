@@ -79,4 +79,25 @@ export default class CommentsController {
             logger.error(e, 'editCommentHandler')
         }
     }
+
+    async deleteCommentHandler(req: FastifyRequest, reply: FastifyReply) {
+        reply.header("Access-Control-Allow-Origin", "*");
+        reply.header("Access-Control-Allow-Methods", "DELETE");
+
+        try {
+            if (req.body === null)
+                return reply.code(400).send({
+                    message: 'No data',
+                    success: false
+                })
+
+            const data = req.query as { commentId: number }
+            const result = await commentsService.deleteComment(data.commentId)
+            return reply.code(200).send({
+                reuslt: result
+            })
+        } catch (e) {
+            logger.error(e, 'deleteCommentHandler')
+        }
+    }
 }
