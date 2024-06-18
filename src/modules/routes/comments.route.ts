@@ -24,7 +24,26 @@ export function commentsRoute(
                     type: 'object',
                     properties: {
                         comments: {
-                            type: 'array'
+                            type: 'array',
+                            properties: {
+                                id: { type: 'number' },
+                                comment: { type:'string' },
+                                user_id: { type: 'number' },
+                                chapter_id: { type:'string' },
+                                createdAt: { type:'string' },
+                                updatedAt: { type:'string' },
+                                upVotes: { type: 'number' },
+                                downVotes: { type: 'number' },
+                                edited: { type: 'boolean' },
+                                ruin_users: {
+                                    type: 'object',
+                                    properties: {
+                                        id: { type: 'number' },
+                                        username: { type:'string' },
+                                        email: { type:'string' }
+                                    }
+                                }
+                            }
                         }
                     }
                 },

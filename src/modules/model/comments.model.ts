@@ -10,4 +10,9 @@ export default interface CommentsModel extends RowDataPacket {
     upVotes: number | null;
     downVotes: number | null;
     edited: boolean | null;
+    ruin_users: {
+        id: number;
+        username: string;
+        email: string;
+    } | null;
 }

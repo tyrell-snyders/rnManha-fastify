@@ -68,9 +68,16 @@ class CommentsService implements ICommentsService {
                     TODO:
                     Cache the comments in a redis cache.
                 */
-
                 const comments = await prisma.comments.findMany({
-                    where: { chapter_id: chapterId }
+                    where: { chapter_id: chapterId },
+                    include: {
+                        ruin_users: {
+                        select: {
+                                id: true,
+                                username: true,
+                            }
+                        }
+                    }
                 }) as CommentsModel[]
 
                 if (comments && comments.length > 0)

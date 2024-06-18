@@ -42,6 +42,42 @@ export function userRoute(
         }
     }, controller.getUsersHandler)
 
+    app.get('/user', {
+        schema: {
+            description: 'Get a single user',
+            tags: ['User Authentication'],
+            querystring: {
+                type: 'object',
+                properties: {
+                    user_id: { type: 'number' }
+                },
+                required: ['user_id']
+            },
+            response: {
+                200: {
+                    type: 'object',
+                    properties: {
+                        user: {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'number' },
+                                username: { type: 'string' },
+                                email: { type: 'string' }
+                            },
+                        },
+                        success: { type: 'boolean' },
+                    }
+                },
+                404: {
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string' }
+                    }
+                }
+            }
+        }
+    }, controller.getUserHandler)
+
     app.post('/register', {
         schema: {
             description: 'User Registration',
