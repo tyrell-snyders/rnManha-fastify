@@ -9,10 +9,29 @@ import prisma from '../../utils/lib/prismaDB'
 interface IUserService {
     registerUser(user: UserModel): Promise<UserModel>
     getAllUsers(): Promise<UserModel[]>
+    getUserById(id: number): Promise<UserModel>
     loginUser(user: UserDTOModel): Promise<UserModel[]>
 }
 
 class UserService implements IUserService {
+    getUserById(id: number): Promise<UserModel> {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const user = await prisma.ruinUser.findUnique({ where: { id: id } }) as UserModel
+                if (user) {
+                    resolve(user)
+                } else {
+                    reject()
+                }
+            } catch (e) {
+                if (e instanceof Error) {
+                    logger.error(`Error: ${e.message}`)
+                    reject(e)
+                }   
+            }
+        })
+    }
+
     async registerUser(user: UserModel): Promise<UserModel> {
         //Password Encryption
         const genSalt = await bcrypt.genSalt(10)

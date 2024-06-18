@@ -44,6 +44,26 @@ export default class UserController {
         }
     }
 
+    async getUserHandler(req: FastifyRequest, reply: FastifyReply) {
+        reply.header("Access-Control-Allow-Origin", "*")
+        reply.header("Access-Control-Allow-Methods", "GET")
+
+        try {
+            const { user_id } = req.query as { user_id: number }
+            const user = await userService.getUserById(user_id)
+            return reply.code(200).send({
+                user,
+                success: true
+            })
+        } catch (e) {
+            logger.error(e, `getUsers err`)
+            return reply.code(404).send({
+                message: "User Not Found",
+                e
+            })
+        }
+    }
+
     async loginUserHandler(req: FastifyRequest, reply: FastifyReply) {
         reply.header("Access-Control-Allow-Origin", "*");
         reply.header("Access-Control-Allow-Methods", "POST");
@@ -68,6 +88,7 @@ export default class UserController {
                 // User found, return the user with success true
                 // token
                 const token = jwt.sign({
+                    id: user[0].id,
                     usernmae: user[0].username,
                     email: user[0].email,
 
