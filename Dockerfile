@@ -1,8 +1,9 @@
 FROM node:16-alpine
 
 ADD package.json /tmp/package.json
+ADD yarn.lock /tmp/yarn.lock
 
-RUN cd /tmp && npm --pure-lockfile
+RUN cd /tmp && yarn --pure-lockfile
 
 ADD ./ /src
 

@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  rnmanhwa-fastify:
+    container_name: rnmanhwa-fastify
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    build:
+      context: ./
+    ports:
+      - 4000:4000
+    
