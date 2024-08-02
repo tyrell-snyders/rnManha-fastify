@@ -13,6 +13,7 @@
     "license": "ISC",
     "dependencies": {
         "@fastify/cors": "^8.4.0",
+        "@fastify/multipart": "^8.3.0",
         "@fastify/swagger": "^8.10.1",
         "@fastify/swagger-ui": "^1.9.3",
         "@fastify/type-provider-json-schema-to-ts": "^2.2.2",
@@ -20,13 +21,16 @@
         "@typegoose/typegoose": "^11.5.0",
         "@types/cors": "^2.8.14",
         "@types/jsonwebtoken": "^9.0.3",
+        "@types/multer": "^1.4.11",
         "bcryptjs": "^2.4.3",
         "cors": "^2.8.5",
         "env-schema": "^5.2.0",
         "fastify": "^4.23.2",
         "fastify-decorators": "^3.15.1",
         "jsonwebtoken": "^9.0.2",
-        "nanoid": "^3.3.4"
+        "multer": "^1.4.5-lts.1",
+        "nanoid": "^3.3.4",
+        "stream-to-buffer": "^0.1.0"
     },
     "devDependencies": {
         "@commitlint/cli": "^17.7.1",
