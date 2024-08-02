@@ -26,8 +26,7 @@ export default class UserController {
             const imageBuffer = await file.toBuffer()
             const imageBase64 = imageBuffer.toString('base64')
 
-            const fields = await req.fields(); // <--- Use req.fields() to access the fields
-
+            const fields = req.body as { userId: string };  
             if (!fields || !fields.userId) {
                 return reply.code(400).send({
                 message: "Invalid userId",

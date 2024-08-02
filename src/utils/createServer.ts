@@ -17,8 +17,8 @@ export async function createServer() {
         allowedHeaders: 'Content-Type'
     })
 
-    app.register(fastifyMultipart, {
-    addToBody: true,
+    app.register(fastifyMultipart as any, {
+        addToBody: true,
     });
 
     const swaggerOptions = {
@@ -82,7 +82,7 @@ export async function createServer() {
     
 
 
-    app.register(fastifySwagger, swaggerOptions)
+    app.register(fastifySwagger as any, swaggerOptions)
     app.register(fastifySwaggerUi, swaggerUiOptions)
 
    

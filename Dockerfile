@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:20-alpine
 
 ADD package.json /tmp/package.json
 ADD yarn.lock /tmp/yarn.lock
@@ -10,6 +10,8 @@ ADD ./ /src
 RUN cp -a /tmp/node_modules /src/
 
 WORKDIR /src
+
+RUN npx prisma generate
 
 RUN npm run-script build
 
