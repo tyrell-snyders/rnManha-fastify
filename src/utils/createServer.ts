@@ -6,6 +6,7 @@ import fastifySwaggerUi from "@fastify/swagger-ui"
 import fastifyCors from "@fastify/cors"
 import { favouritesRoute } from "../modules/routes/favourites.route"
 import { commentsRoute } from "../modules/routes/comments.route"
+import fastifyMultipart from "@fastify/multipart"
 
 export async function createServer() {
     const app = fastify()
@@ -16,6 +17,10 @@ export async function createServer() {
         allowedHeaders: 'Content-Type'
     })
 
+    app.register(fastifyMultipart, {
+    addToBody: true,
+    });
+
     const swaggerOptions = {
         swagger: {
             info: {
@@ -25,7 +30,7 @@ export async function createServer() {
             },
             host: 'localhost:4000',
             schemes: ['http', 'https'],
-            consumes: ['application/json'],
+            consumes: ['multipart/form-data', 'application/json'],
             produces: ['application/json'],
             tags: [
                 { name: 'User Authentication', description: 'Authentication for user registration'}
@@ -47,7 +52,15 @@ export async function createServer() {
                         username: { type: 'string' },
                         pass: { type: 'string' }
                     }
-                }
+                },
+                    AvatarDTO: {
+                        type: 'object',
+                        required: ['userId', 'imageUrl'],
+                        properties: {
+                            userId: { type: 'number' },
+                            imageUrl: { type: 'string', format: 'binary' },
+                        },
+                    },
             },
             securityDefinitions: {
                 JWT: {
@@ -65,6 +78,8 @@ export async function createServer() {
         exposeRoute: true,
         staticCSP: true,
     }
+
+    
 
 
     app.register(fastifySwagger, swaggerOptions)

@@ -12,6 +12,7 @@ model RuinUser {
   username   String       @db.VarChar(45)
   email      String       @db.VarChar(45)
   pass       String       @db.VarChar(99)
+  avatars    avatars?
   comments   comments[]
   favourites Favourites[]
 
@@ -42,4 +43,11 @@ model comments {
   ruin_users RuinUser? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_id_to_id")
 
   @@index([user_id], map: "fk_user_id_to_id")
+}
+
+model avatars {
+  id         Int       @id @default(autoincrement())
+  imageUrl   String    @db.VarChar(255)
+  userId     Int?      @unique(map: "userId")
+  ruin_users RuinUser? @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "avatars_ibfk_1")
 }

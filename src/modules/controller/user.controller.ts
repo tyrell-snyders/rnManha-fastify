@@ -5,8 +5,58 @@ import UserModel from "../model/user.model"
 import UserDTOModel from "../model/DTO/userDTO.model";
 import jwt from 'jsonwebtoken'
 import { config } from "../../utils/config";
+import { MultipartFile } from '@fastify/multipart'
 
 export default class UserController {
+
+    async addAvatarHandler(req: FastifyRequest, reply: FastifyReply) {
+        reply.header("Access-Control-Allow-Origin", "*");
+        reply.header("Access-Control-Allow-Methods", "POST")
+
+        try {
+            const file = await req.file()
+            console.log(file)
+            if (!file) {
+                return reply.code(400).send({
+                    message: "No file uploaded",
+                    success: false
+                });
+            }
+
+            const imageBuffer = await file.toBuffer()
+            const imageBase64 = imageBuffer.toString('base64')
+
+            const fields = await req.fields(); // <--- Use req.fields() to access the fields
+
+            if (!fields || !fields.userId) {
+                return reply.code(400).send({
+                message: "Invalid userId",
+                success: false
+                });
+            }
+
+            const userId = parseInt(fields.userId, 10);
+            
+
+            const data = { 
+                imageUrl: imageBase64, 
+                userId: userId,
+            }
+            await userService.addAvatar(data)
+
+            return reply.code(201).send({
+                message: "Successfully added avatar",
+                success: true
+            });
+        } catch (e) {
+            logger.error(e, `addAvatarHandler error`);
+            return reply.code(500).send({
+                message: "Error adding avatar",
+                e
+            });
+        }
+    }
+    
 
     async registerUserHandler(req: FastifyRequest, reply: FastifyReply) {
         reply.header("Access-Control-Allow-Origin", "*");

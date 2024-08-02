@@ -109,6 +109,28 @@ export function userRoute(
         }
     }, controller.registerUserHandler)
 
+    app.post('/add-avatar', {
+        schema: {
+            description: 'User Avater',
+            tags: ['User Authentication'],
+            consumes: ['multipart/form-data', 'application/json'],
+            response: {
+                201: {
+                    type: 'object',
+                    properties: {
+                        message: {type: 'string'}
+                    }
+                },
+                500: {
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string' }
+                    }
+                }
+            }
+        }
+    }, controller.addAvatarHandler)
+
     app.post('/login', {
         schema: {
             description: 'User Login',

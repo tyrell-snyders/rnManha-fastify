@@ -5,4 +5,8 @@ export default interface UserModel extends RowDataPacket {
     username: string;
     email: string;
     pass: string;
+    avatars: {
+        id: number,
+        imageUrl: string
+    } | null;
 }
