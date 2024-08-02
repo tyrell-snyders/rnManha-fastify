@@ -1,0 +1,5 @@
+ruin-mangafastify.42web.io {
+	reverse_proxy rnmanhwa-fastify:4000 {
+		header_down Strict-Transport-Security max-age=31536000;
+	}
+}

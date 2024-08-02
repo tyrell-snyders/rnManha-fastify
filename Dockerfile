@@ -15,7 +15,4 @@ RUN npx prisma generate
 
 RUN npm run-script build
 
-## TODO rm  before deployment
-EXPOSE 4000
-
 CMD ["node", "build/src/app.js"]

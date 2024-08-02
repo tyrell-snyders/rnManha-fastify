@@ -8,8 +8,6 @@ services:
       - DATABASE_URL=mysql://root:Newdayz21@localhost:3306/ruin_manga
     build:
       context: ./
-    ports:
-      - 4000:4000
     depends_on:
       - mysql
     command: sh -c "npx prisma generate && node build/src/app.js"
@@ -22,4 +20,21 @@ services:
         MYSQL_DATABASE: ruin_manga
       ports:
         - "3307:3306"
-    
+
+  cadd:
+    image: caddy/caddy:2.8.4-alpine
+    container_name: caddy-services
+    restart: unless-stopped
+    ports:
+      - 443:443
+      - 80:80
+    volumes:
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/site:/services
+      - caddy_data:/data
+      - caddy_config:/config
+
+
+volumes:
+  caddy_data:
+  caddy_config:
