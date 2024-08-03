@@ -43,7 +43,7 @@ export default class CommentsController {
         try {
             if (req.body === null) {
                 return reply.code(404).send({
-                    message: "No data",
+                    message: "No dat",
                     success: false 
                 });
             } else {
