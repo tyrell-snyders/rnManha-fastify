@@ -17,10 +17,6 @@ export async function createServer() {
         allowedHeaders: 'Content-Type'
     })
 
-    app.register(fastifyMultipart, {
-    addToBody: true,
-    });
-
     const swaggerOptions = {
         swagger: {
             info: {
@@ -30,7 +26,7 @@ export async function createServer() {
             },
             host: 'localhost:4000',
             schemes: ['http', 'https'],
-            consumes: ['multipart/form-data', 'application/json'],
+            consumes: ['application/json'],
             produces: ['application/json'],
             tags: [
                 { name: 'User Authentication', description: 'Authentication for user registration'}

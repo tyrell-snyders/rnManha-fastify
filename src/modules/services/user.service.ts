@@ -10,7 +10,6 @@ interface IUserService {
     getAllUsers(): Promise<UserModel[]>
     getUserById(id: number): Promise<UserModel>
     loginUser(user: UserDTOModel): Promise<UserModel[]>
-    addAvatar(data: avatarDTO): void
 }
 
 class UserService implements IUserService {
@@ -107,29 +106,6 @@ class UserService implements IUserService {
                     }
                 }
         });
-    }
-
-    async addAvatar(data: avatarDTO): Promise<void> {
-        try {
-            const { userId, imageUrl } = data
-            console.log(imageUrl)
-            const avatar = await prisma.avatars.create({
-                data: {
-                    userId,
-                    imageUrl
-                }
-            })
-
-            if (avatar) {
-                logger.info(`Avatar added to user ${userId}`)
-            } else {
-                logger.error(`Error adding avatar to user ${userId}`)
-            }
-        } catch (e) {
-            if (e instanceof Error) {
-                logger.error(`Error: ${e.message}`)
-            }
-        }
     }
 }
 
