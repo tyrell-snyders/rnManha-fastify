@@ -47,7 +47,7 @@ model comments {
 
 model avatars {
   id         Int       @id @default(autoincrement())
-  imageUrl   String    @db.VarChar(255)
+  imageUrl   String    @db.MediumText
   userId     Int?      @unique(map: "userId")
   ruin_users RuinUser? @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "avatars_ibfk_1")
 }

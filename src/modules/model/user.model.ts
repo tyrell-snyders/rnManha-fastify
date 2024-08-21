@@ -7,6 +7,7 @@ export default interface UserModel extends RowDataPacket {
     pass: string;
     avatars: {
         id: number,
-        imageUrl: string
+        imageUrl: string,
+        userId: number,
     } | null;
 }

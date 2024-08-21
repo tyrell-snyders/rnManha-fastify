@@ -4,6 +4,7 @@ import UserModel from "../model/user.model"
 import bcrypt from 'bcrypt'
 import prisma from '../../utils/lib/prismaDB'
 import { avatarDTO } from "../model/DTO/avatar.model"
+import { getAvatar }  from '../../utils/lib/avatar'
 
 interface IUserService {
     registerUser(user: UserModel): Promise<UserModel>
@@ -16,7 +17,18 @@ class UserService implements IUserService {
     getUserById(id: number): Promise<UserModel> {
         return new Promise(async (resolve, reject) => {
             try {
-                const user = await prisma.ruinUser.findUnique({ where: { id: id } }) as UserModel
+                const user = await prisma.ruinUser.findUnique({ 
+                    where: { id: id }, 
+                    include: { 
+                        avatars: {
+                            select: {
+                                id: true,
+                                imageUrl: true,
+                            }
+                        }
+                    } 
+                }) as UserModel
+
                 if (user) {
                     resolve(user)
                 } else {
@@ -31,6 +43,12 @@ class UserService implements IUserService {
         })
     }
 
+        //Test data used to create user
+        // {
+            // "username": "DonTheLiver",
+            // "email": "don@music.com",
+            // "pass": "Music123"
+        // }
     async registerUser(user: UserModel): Promise<UserModel> {
         //Password Encryption
         const genSalt = await bcrypt.genSalt(10)
@@ -47,6 +65,15 @@ class UserService implements IUserService {
                     }
                 })
 
+                //Create new user avatar
+                const avatar = getAvatar(`${user.username}.${user.id}/${user.email.split('@' || '.')[0]}`)
+                await prisma.avatars.create({
+                    data: {
+                        imageUrl: avatar,
+                        userId: newUser.id
+                    }
+                })  
+
                 if (newUser) {
                     const dbUser = { ...user, id: newUser.id }
                     resolve(dbUser)
@@ -61,22 +88,29 @@ class UserService implements IUserService {
     }
 
     async getAllUsers(): Promise<UserModel[]> {
-        return new Promise(async (resolve, reject) => {
-            try {
-                //Get all users
-                const dbUsers = await prisma.ruinUser.findMany({}) as UserModel[]
-                if (dbUsers.length > 0)
-                    resolve(dbUsers)
-                else
-                    resolve([])
-            } catch (e) {
-                if (e instanceof Error) {
-                    logger.error(`Error: ${e.message}`)
-                    reject(e)
+        try {
+            // Get all users with their avatars
+            const dbUsers = await prisma.ruinUser.findMany({
+                include: { 
+                    avatars: {
+                        select: {
+                            id: true,
+                            imageUrl: true,
+                            userId: true
+                        }
+                    }
                 }
+            }) as UserModel[];
+
+            return dbUsers.length > 0 ? dbUsers : [];
+        } catch (e) {
+            if (e instanceof Error) {
+                logger.error(`Error: ${e.message}`);
             }
-        })
+            throw e;
+        }
     }
+
 
     async loginUser(user: UserDTOModel): Promise<UserModel[]> {
         if (!user) {

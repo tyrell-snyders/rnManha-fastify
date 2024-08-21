@@ -25,9 +25,15 @@ export function userRoute(
                                     id: { type: 'number' },
                                     username: { type: 'string' },
                                     email: { type: 'string' },
-                                    password: { type: 'string' },
+                                    avatars: { 
+                                        type: 'object',
+                                        properties: {
+                                            id: { type: 'number' },
+                                            imageUrl: { type: 'string' },
+                                        },
+                                    }
                                 },
-                            },
+                            }, 
                         },
                         success: { type: 'boolean' },
                     },
@@ -62,9 +68,17 @@ export function userRoute(
                             properties: {
                                 id: { type: 'number' },
                                 username: { type: 'string' },
-                                email: { type: 'string' }
+                                email: { type: 'string' },
+                                avatars: { 
+                                        type: 'object',
+                                        properties: {
+                                            id: { type: 'number' },
+                                            imageUrl: { type: 'string' },
+                                            userId: { type: 'number' },
+                                        }
+                                }
                             },
-                        },
+                        }, 
                         success: { type: 'boolean' },
                     }
                 },
