@@ -17,7 +17,18 @@ class UserService implements IUserService {
     getUserById(id: number): Promise<UserModel> {
         return new Promise(async (resolve, reject) => {
             try {
-                const user = await prisma.ruinUser.findUnique({ where: { id: id } }) as UserModel
+                const user = await prisma.ruinUser.findUnique({ 
+                    where: { id: id }, 
+                    include: { 
+                        avatars: {
+                            select: {
+                                id: true,
+                                imageUrl: true,
+                            }
+                        }
+                    } 
+                }) as UserModel
+
                 if (user) {
                     resolve(user)
                 } else {
@@ -34,9 +45,9 @@ class UserService implements IUserService {
 
         //Test data used to create user
         // {
-        // "username": "DonTheLiver",
-        // "email": "don@music.com",
-        // "pass": "Music123"
+            // "username": "DonTheLiver",
+            // "email": "don@music.com",
+            // "pass": "Music123"
         // }
     async registerUser(user: UserModel): Promise<UserModel> {
         //Password Encryption

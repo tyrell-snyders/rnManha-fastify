@@ -30,7 +30,6 @@ export default class UserController {
         try {
             logger.info(`Getting Users`)
             const users = await userService.getAllUsers()
-            console.log(users)
             return reply.code(200).send({
                 users,
                 success: true
